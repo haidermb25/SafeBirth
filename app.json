@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "SafeBirth",
+    "slug": "SafeBirth",
+    "version": "1.0.0",
+    "newArchEnabled": true,
+    "extra": {
+      "eas": {
+        "projectId": "56c0704c-0700-430e-a6cc-6513197a6e2f"
+      }
+    },
+    "plugins": [
+      "expo-video"
+    ]
+  }
+}
