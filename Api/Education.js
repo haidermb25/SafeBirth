@@ -9,12 +9,11 @@ export const fetchContent = async () => {
       },
     });
     if (!response.ok) {
-      throw new Error("Failed to fetch posts");
+      return null
     }
     const data = await response.json();
     return data;
-  } catch (error) {
-    console.error("Error fetching posts:", error);
-    throw error;
+  } catch (error) { 
+    return null
   }
 };

@@ -231,6 +231,9 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 25,
+    borderWidth:1,
+    padding:10,
+    borderColor:'#706e6e'
   },
   ImageCard: {
     width: "90%",

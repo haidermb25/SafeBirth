@@ -22,20 +22,11 @@ const getUserData = async (email) => {
     if (userData) {
       return userData;
     } else {
-      throw new Error("Invalid response format");
+      return null
     }
   } catch (error) {
-    console.error("Error message:", error.message);
     return null;
   }
 };
-
-//Upload the new post
-const UploadPosts = () => {};
-
-//Get all user posts
-const GetAlluserPosts = () => {};
-//Rate the post
-const PostRating = () => {};
 
 export default getUserData;

@@ -33,7 +33,7 @@ const EducationContent = () => {
       <View style={styles.header}>
         <View style={styles.goBack}>
           <TouchableOpacity onPress={() => navigation.navigate("Dashboard")}>
-            <Ionicons name="arrow-back-outline" size={30} color="white" />
+            <Ionicons name="arrow-back-outline" size={30} color="white" style={{marginLeft:8}} />
           </TouchableOpacity>
         </View>
         <View style={styles.Community}>
@@ -70,12 +70,15 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginRight: 10,
     marginLeft: 10,
+    borderRadius:10,
+    position:"static"
   },
   headerTitle: {
-    marginRight: 10,
+    marginRight: 60,
     fontSize: 24,
     fontWeight: "bold",
     color: "#ffffff",
+   
   },
 });
 

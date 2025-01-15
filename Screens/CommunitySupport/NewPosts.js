@@ -54,13 +54,6 @@ const App = () => {
         </View>
       </View>
 
-      <View style={styles.filterContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search..."
-          placeholderTextColor="#888"
-        />
-      </View>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {posts.length === 0 ? (
@@ -99,7 +92,11 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(52, 167, 81, 0.9)",
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-    marginTop: 20,
+    paddingRight:50,
+    borderRadius:10,
+    marginTop: 10,
+    marginBottom:10,
+    paddingLeft:5
   },
   headerTitle: {
     marginRight: 10,

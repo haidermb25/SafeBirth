@@ -45,6 +45,7 @@ export default Login = () => {
         const data = await getUserData(email);
         await AsyncStorage.setItem("userid", String(data.id));
         await AsyncStorage.setItem("name", data.name);
+        await AsyncStorage.setItem("email", data.email);
         await AsyncStorage.setItem("username", data.username);
         setName(data.name);
       };
@@ -106,11 +107,12 @@ export default Login = () => {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity onPress={()=>{
-        navigation.navigate('Forgot')
-      }}>
+      <TouchableOpacity onPress={() => { navigation.navigate('Forgot'); }}>
+       <View style={styles.forgotContainer}>
         <Text style={styles.forgot}>Forgot Password?</Text>
+      </View>
       </TouchableOpacity>
+
       {/* Sign In Button */}
       <TouchableOpacity
         style={[
@@ -234,10 +236,16 @@ const styles = StyleSheet.create({
     color: "#00C781",
     fontWeight: "bold",
   },
+  forgotContainer: {
+    alignSelf: 'flex-start',  // Align to the start
+    width: '100%',
+     color: "#00C781",
+     marginTop:-10,
+     marginBottom:10
+  },
+  
   forgot: {
     fontSize: 14,
     color: "#00C781",
-    fontWeight: "bold",
-    alignSelf: 'flex-start',  // Align only the 'forgot' text to the start
   },
 });

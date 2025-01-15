@@ -8,7 +8,7 @@ import {
   Image,
   Pressable,
 } from "react-native";
-import SignUpApi from "../../Api/SignUp";
+import {SignUpApi,AfterEmailVerification} from "../../Api/SignUp";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Dropdown } from "react-native-element-dropdown";
@@ -23,6 +23,8 @@ export default SignUp = () => {
   const [gender, setGender] = useState("");
   const [IsDisabledButton, setIsDisabledButton] = useState(true);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+  const [confirmPassowrd,setConfirmPassword]=useState(false)
   const [isSelected, setIsSelected] = useState(false);
 
   const pickerItems = [
@@ -34,6 +36,10 @@ export default SignUp = () => {
   
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
+  };
+
+  const toggleconfirmPasswordVisibility = () => {
+    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
   };
   const toggleCheckbox = () => {
     setIsSelected(!isSelected); // Toggle the checkbox selection state
@@ -105,7 +111,7 @@ export default SignUp = () => {
     if (!validateUserName()) {
       Toast.show({
         type: "error",
-        text1: "Invalid Name!",
+        text1: "Invalid User Name!",
         text2:
           "UseName should not contain spaces and uppercase and length greater than 1",
         position: "top",
@@ -113,28 +119,39 @@ export default SignUp = () => {
       });
       return;
     }
+    if(password!==confirmPassowrd){
+      Toast.show({
+        type: "error",
+        text1: "Password Match!",
+        text2:
+          "Password and Confirm Password is not equal",
+        position: "top",
+        visibilityTime: 3000,
+      });
+      return;
+    }
     const response = await SignUpApi(name, username, email, password, gender);
-    if (response) {
+    if (response.success) {
+      navigation.navigate("EmailVerification", {
+        name,
+        username,
+        email,
+        password,
+        gender
+      });
       setGender("");
       setName("");
       setusername("");
       setEmail("");
       setPassword("");
-      Toast.show({
-        type: "success",
-        text1: "Sign-Up Successful!",
-        text2: "Your account has been created successfully.",
-        position: "top",
-        visibilityTime: 2000,
-      });
-      setTimeout(() => {
-        navigation.goBack();
-      }, 2000); // Delay navigation
+      setConfirmPassword("")
+      setIsSelected(false)
     }
+    
   };
 
   useEffect(() => {
-    if (name && username && email && password && gender) {
+    if (name && username && email && password && gender&&isSelected) {
       setIsDisabledButton(false);
     } else {
       setIsDisabledButton(true);
@@ -148,7 +165,7 @@ export default SignUp = () => {
           <AntDesign name="arrowleft" size={24} color="black" />
         </Pressable>
         <Image
-          source={require("../../Assets/Images/addLogo1.png")} // Replace with your logo
+          source={require("../../Assets/Images/baby.png")} // Replace with your logo
           style={styles.logo}
         />
       </View>
@@ -178,7 +195,7 @@ export default SignUp = () => {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.inputField}
-          placeholder="**************"
+          placeholder="Password"
           placeholderTextColor="#C7C7CD"
           secureTextEntry={!isPasswordVisible}
           value={password}
@@ -190,6 +207,26 @@ export default SignUp = () => {
         >
           <Ionicons
             name={isPasswordVisible ? "eye-off" : "eye"}
+            size={20}
+            color="#C7C7CD"
+          />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.inputField}
+          placeholder="Confirm Password"
+          placeholderTextColor="#C7C7CD"
+          secureTextEntry={!isConfirmPasswordVisible}
+          value={confirmPassowrd}
+          onChangeText={setConfirmPassword}
+        />
+        <TouchableOpacity
+          onPress={toggleconfirmPasswordVisibility}
+          style={styles.icon}
+        >
+          <Ionicons
+            name={isConfirmPasswordVisible ? "eye-off" : "eye"}
             size={20}
             color="#C7C7CD"
           />
@@ -241,7 +278,7 @@ export default SignUp = () => {
         <Text style={styles.signUpButtonText}>SIGN UP</Text>
       </TouchableOpacity>
       <View style={styles.loginContainer}>
-        <Text style={styles.signUpText}>Don’t have an account?</Text>
+        <Text style={styles.signUpText}>Already have an account?</Text>
         <Pressable
           onPress={() => {
             navigation.navigate("Login");

@@ -2,30 +2,23 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   TextInput,
-  Button,
   StyleSheet,
   Text,
   Image,
   TouchableOpacity,
-  PermissionsAndroid,
-  Platform,
 } from "react-native";
-import { launchImageLibrary } from "react-native-image-picker";
 import * as ImagePicker from "expo-image-picker";
 import { addPost } from "../../Api/AllPosts";
-const PostUploadComponent = ({ onNewPost }) => {
-  const [postText, setPostText] = useState("");
-  const [postImage, setPostImage] = useState(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const [isMounted, setIsMounted] = useState(true);
-  const [imageUri, setImageUri] = useState(null);
-  useEffect(() => {
-    // Cleanup function that sets isMounted to false when component unmounts
-    return () => setIsMounted(false);
-  }, []);
+import Toast from "react-native-toast-message";
 
-  //Image Picker
-   const handleImagePicker = async () => {
+const PostUploadComponent = ({ onNewPost }) => {
+  const [postText, setPostText] = useState(""); // Store the post title/text
+  const [postImage, setPostImage] = useState(null); // Store the selected image URI
+  const [isUploading, setIsUploading] = useState(false); // Uploading state to show loading spinner
+  const [imageUri, setImageUri] = useState(null); // Image URI for preview
+
+  // Image Picker
+  const handleImagePicker = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -33,21 +26,62 @@ const PostUploadComponent = ({ onNewPost }) => {
     });
 
     if (!result.canceled) {
+      setPostImage(result.assets[0].uri); // Set the image URI for the preview
       setImageUri(result.assets[0].uri);
     }
   };
 
+  // Handle Post Submission
   const handlePostSubmit = async () => {
- 
-    const response = await addPost(postText, postImage);
+    if (!postText.trim() && !postImage) {
+      // Ensure there is either text or an image before submission
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Either post text or an image is required",
+        position: "top",
+        visibilityTime: 2000,
+      });
+      return;
+    }
 
-    // Handle success or failure
-    if (response) {
-      alert("Post Uploaded Successfully!");
-      setPostText("")
-      setPostImage("")
-    } else {
-      alert("There is some Problem!");
+    setIsUploading(true);
+
+    try {
+      // Call the addPost function with the post text and image URI
+      const response = await addPost(postText, postImage);
+
+      // Handle success
+      if (response) {
+        Toast.show({
+          type: "success",
+          text1: "New Post",
+          text2: "Post Uploaded Successfully",
+          position: "top",
+          visibilityTime: 2000,
+        });
+
+        // Notify the parent component to refresh data
+        if (onNewPost) {
+          onNewPost();  // This will trigger a re-render in the parent component
+        }
+
+        // Reset the form state after successful upload
+        setPostText("");
+        setPostImage(null);
+        setImageUri(null);
+      }
+    } catch (error) {
+      // Handle error
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "There was an issue uploading the post",
+        position: "top",
+        visibilityTime: 2000,
+      });
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -57,7 +91,7 @@ const PostUploadComponent = ({ onNewPost }) => {
       <View style={styles.headerContainer}>
         <Image
           style={styles.avatar}
-          source={{ uri: "https://via.placeholder.com/50" }} // Avatar image URL
+          source={require("../../Assets/Images/baby.png")} // Correct local image path
         />
         <Text style={styles.userName}>New Post</Text>
       </View>
@@ -83,6 +117,7 @@ const PostUploadComponent = ({ onNewPost }) => {
           </>
         )}
       </TouchableOpacity>
+
       {/* Display Selected Image */}
       {postImage && (
         <Image source={{ uri: postImage }} style={styles.selectedImage} />
@@ -90,18 +125,15 @@ const PostUploadComponent = ({ onNewPost }) => {
 
       {/* Post Upload Button */}
       <View style={styles.buttonContainer}>
-      <TouchableOpacity
-      onPress={handlePostSubmit}
-      disabled={isUploading}
-      style={[
-        styles.button,
-        isUploading ? styles.uploadingText : styles.buttonEnabled,
-      ]}
-    >
-      <Text style={styles.buttonText}>
-        {isUploading ? "Uploading..." : "Upload Post"}
-      </Text>
-    </TouchableOpacity>
+        <TouchableOpacity
+          onPress={handlePostSubmit}
+          disabled={isUploading}
+          style={[styles.button, isUploading ? styles.uploadingText : styles.buttonEnabled]}
+        >
+          <Text style={styles.buttonText}>
+            {isUploading ? "Uploading..." : "Upload Post"}
+          </Text>
+        </TouchableOpacity>
       </View>
 
       {/* Upload status message */}
@@ -166,133 +198,31 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   filePicker: {
-    marginLeft:0,
-        width: 360,
-        height: 200,
-        borderWidth: 1,
-        borderColor: "#0f0",
-        borderRadius: 10,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#f9f9f9",
-        marginBottom: 20,
-      },
-      icon: {
-        fontSize: 40,
-        marginBottom: 10,
-        color: "#aaa",
-      },
-      text: {
-        color: "#aaa",
-        fontSize: 16,
-      },
-      imagePreview: {
-        width: "100%",
-        height: "100%",
-        borderRadius: 10,
-      },
+    marginLeft: 0,
+    width: 360,
+    height: 200,
+    borderWidth: 1,
+    borderColor: "#0f0",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f9f9f9",
+    marginBottom: 20,
+  },
+  icon: {
+    fontSize: 40,
+    marginBottom: 10,
+    color: "#aaa",
+  },
+  text: {
+    color: "#aaa",
+    fontSize: 16,
+  },
+  imagePreview: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 10,
+  },
 });
 
 export default PostUploadComponent;
-
-
-
-
-// import React, { useState } from "react";
-// import {
-//   View,
-//   Text,
-//   Image,
-//   TouchableOpacity,
-//   StyleSheet,
-// } from "react-native";
-// import * as ImagePicker from "expo-image-picker";
-
-// const FilePicker = () => {
-//   const [imageUri, setImageUri] = useState(null);
-//   const [buttonText, setButtonText] = useState("Submit");
-
-//   const handleImagePicker = async () => {
-//     const result = await ImagePicker.launchImageLibraryAsync({
-//       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-//       allowsEditing: true,
-//       quality: 1,
-//     });
-
-//     if (!result.canceled) {
-//       setImageUri(result.assets[0].uri);
-//     }
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <TouchableOpacity style={styles.filePicker} onPress={handleImagePicker}>
-//         {imageUri ? (
-//           <Image source={{ uri: imageUri }} style={styles.imagePreview} />
-//         ) : (
-//           <>
-//             <Text style={styles.icon}>📂</Text>
-//             <Text style={styles.text}>Select file</Text>
-//           </>
-//         )}
-//       </TouchableOpacity>
-
-//       <TouchableOpacity
-//         style={styles.submitButton}
-//         onPress={() => alert(`You clicked: ${buttonText}`)}
-//       >
-//         <Text style={styles.submitButtonText}>{`${buttonText} to New Post`}</Text>
-//       </TouchableOpacity>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     backgroundColor: "#fff",
-//     padding: 20,
-//   },
-//   filePicker: {
-//     width: 200,
-//     height: 150,
-//     borderWidth: 1,
-//     borderColor: "#0f0",
-//     borderRadius: 10,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     backgroundColor: "#f9f9f9",
-//     marginBottom: 20,
-//   },
-//   icon: {
-//     fontSize: 40,
-//     marginBottom: 10,
-//     color: "#aaa",
-//   },
-//   text: {
-//     color: "#aaa",
-//     fontSize: 16,
-//   },
-//   imagePreview: {
-//     width: "100%",
-//     height: "100%",
-//     borderRadius: 10,
-//   },
-//   submitButton: {
-//     width: 150,
-//     height: 50,
-//     borderRadius: 25,
-//     backgroundColor: "#007BFF",
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   submitButtonText: {
-//     color: "#fff",
-//     fontSize: 16,
-//     fontWeight: "bold",
-//   },
-// });
-
-// export default FilePicker;

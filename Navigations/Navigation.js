@@ -16,6 +16,7 @@ import Profile from "../Screens/Dashboards/Profile";
 import ContentPosts from "../Screens/Content Management/EducationContent";
 import PrivacyPolicyScreen from "../Screens/Auth/Terms&Policy";
 import ChangePasswordScreen from "../Screens/Auth/changePassword";
+import EmailVerificationScreen from "../Screens/Auth/verifyEmail";
 // Stack Navigations
 const Stack = createNativeStackNavigator();
 function StackNavigations() {
@@ -39,6 +40,17 @@ function StackNavigations() {
       <Stack.Screen
         name="Forgot"
         component={ChangePasswordScreen}
+        options={{
+          headerShown: false,
+          contentStyle: {
+            paddingTop: 20, // Add padding at the top
+          },
+        }}
+      />
+      
+      <Stack.Screen
+        name="EmailVerification"
+        component={EmailVerificationScreen}
         options={{
           headerShown: false,
           contentStyle: {
@@ -151,18 +163,28 @@ function DrawerNavigation() {
         },
       }}
     >
-      <Drawer.Screen
-        name="Profile"
-        component={Profile}
-        options={({ navigation }) => ({
-          drawerLabel: () => (
-            <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-              <Image source={require("../Assets/Images/Mask group.png")} />
-            </TouchableOpacity>
-          ),
-          headerShown: false,
-        })}
-      />
+    <Drawer.Screen
+  name="Profile"
+  component={Profile}
+  options={({ navigation }) => ({
+    drawerLabel: () => (
+      <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+        <Image 
+          source={require("../Assets/Images/Mask group.png")} 
+          style={{
+            height: 50,
+            width: 50,
+            borderRadius: 25, // This will make it circular
+            borderWidth:1,
+            borderColor:'#706e6e'
+          }} 
+        />
+      </TouchableOpacity>
+    ),
+    headerShown: false,
+  })}
+/>
+
       <Drawer.Screen
         name="Dashboard"
         component={Dashboard}
