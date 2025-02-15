@@ -189,8 +189,17 @@ const Dashboard = () => {
             onPress={() => alert("View Full Plan pressed")}
           />
         </View>
-      </ScrollView>
+      </ScrollView>     
+      <View style={{ position: 'absolute', bottom: 30, right: 10,zIndex:40,cursor:'pointer' }}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("CareBot")}> 
+      <Image
+        source={require("../../Assets/Images/carebot.png")}
+        style={{ width: 60, height: 60 }}
+      />
+      </TouchableOpacity>
+      </View>
     </View>
+
   );
 };
 

@@ -17,6 +17,8 @@ import ContentPosts from "../Screens/Content Management/EducationContent";
 import PrivacyPolicyScreen from "../Screens/Auth/Terms&Policy";
 import ChangePasswordScreen from "../Screens/Auth/changePassword";
 import EmailVerificationScreen from "../Screens/Auth/verifyEmail";
+import CarBot from "../Screens/CareBot/CarBot";
+import GameCard from "../Screens/Games/Games";
 // Stack Navigations
 const Stack = createNativeStackNavigator();
 function StackNavigations() {
@@ -191,6 +193,11 @@ function DrawerNavigation() {
         options={{ headerShown: false }}
       />
       <Drawer.Screen
+        name="CareBot"
+        component={CarBot}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
         name="Community Support"
         component={CommunityTabNavigation}
         options={{ headerShown: false }}
@@ -198,6 +205,11 @@ function DrawerNavigation() {
       <Drawer.Screen
         name="Pregnancy Content"
         component={ContentPosts}
+        options={{ headerShown: false }}
+      />
+   <Drawer.Screen
+        name="Games"
+        component={GameCard}
         options={{ headerShown: false }}
       />
       {/* Custom Drawer Item for Logout */}
