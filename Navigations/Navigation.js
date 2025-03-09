@@ -19,6 +19,11 @@ import ChangePasswordScreen from "../Screens/Auth/changePassword";
 import EmailVerificationScreen from "../Screens/Auth/verifyEmail";
 import CarBot from "../Screens/CareBot/CarBot";
 import GameCard from "../Screens/Games/Games";
+import DietCards from "../Screens/DietRecommendation/DietCards";
+import DietDetail from "../Screens/DietRecommendation/DietDetail";
+import ExerciseCards from "../Screens/ExerciseRecommendation/ExerciseCards";
+import ExerciseDetail from "../Screens/ExerciseRecommendation/ExerciseDetail";
+import WordScramble from "../Screens/Games/WordScramble";
 // Stack Navigations
 const Stack = createNativeStackNavigator();
 function StackNavigations() {
@@ -151,6 +156,66 @@ function CommunityTabNavigation() {
   );
 }
 
+
+const diet = createNativeStackNavigator();
+
+function DietNavigation() {
+  return (
+    <diet.Navigator>
+      <diet.Screen
+        name="DietCards"
+        component={DietCards}
+        options={{ headerShown: false }}
+      />
+       <diet.Screen
+        name="DietDetail"
+        component={DietDetail}
+        options={{ headerShown: false }}
+      />
+    </diet.Navigator>
+  );
+}
+
+const exercise = createNativeStackNavigator();
+function ExerciseNavigation() {
+  return (
+    <exercise.Navigator>
+      <exercise.Screen
+        name="ExerciseCards"
+        component={ExerciseCards}
+        options={{ headerShown: false }}
+      />
+       <exercise.Screen
+        name="ExerciseDetail"
+        component={ExerciseDetail}
+        options={{ headerShown: false }}
+      />
+    </exercise.Navigator>
+  );
+}
+
+
+
+const games=createNativeStackNavigator();
+function GameNavigation(){
+  return(
+    <games.Navigator>
+      <games.Screen
+      name="Games"
+      component={GameCard}
+      options={{ headerShown: false }}
+      />
+       <games.Screen
+      name="WordScramble"
+      component={WordScramble}
+      options={{ headerShown: false }}
+      />
+    </games.Navigator>
+  );
+}
+
+
+
 // Drawer Navigation
 const Drawer = createDrawerNavigator();
 function DrawerNavigation() {
@@ -198,6 +263,16 @@ function DrawerNavigation() {
         options={{ headerShown: false }}
       />
       <Drawer.Screen
+        name="Exercise Recommendations"
+        component={ExerciseNavigation}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="Diet Recommendations"
+        component={DietNavigation}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
         name="Community Support"
         component={CommunityTabNavigation}
         options={{ headerShown: false }}
@@ -209,7 +284,7 @@ function DrawerNavigation() {
       />
    <Drawer.Screen
         name="Games"
-        component={GameCard}
+        component={GameNavigation}
         options={{ headerShown: false }}
       />
       {/* Custom Drawer Item for Logout */}
@@ -224,7 +299,7 @@ function DrawerNavigation() {
                 flexDirection: "row",
                 alignItems: "center",
                 marginVertical: 10,
-                marginTop: '220%',
+                marginTop: '116%',
               }}
             >
               <Ionicons name="log-out-outline" size={24} color="red" />

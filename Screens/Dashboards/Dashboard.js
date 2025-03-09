@@ -24,6 +24,18 @@ const Dashboard = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { name } = useName();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const userData = await getUserData();
+      console
+      if (userData) {
+        console.log(userData);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <View style={styles.container}>
       {/* Top Bar */}
@@ -124,82 +136,67 @@ const Dashboard = () => {
         {/* Exercise Plans */}
         <View style={styles.RecommendCards1}>
           <Text style={styles.recommendText}>Exercise Plans</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <DietPlanCard
-              planName="Weight Loss Plan"
-              timePeriod="12 Weeks"
-              objective="Lose weight and improve overall health"
-              mealBreakdown="Breakfast, Lunch, Dinner, Snacks"
-              rating={4.5}
-              reviews={2530}
-              fees={50.99}
-              onPress={() => alert("View Full Plan pressed")}
-            />
-            <DietPlanCard
-              planName="Weight Loss Plan"
-              timePeriod="12 Weeks"
-              objective="Lose weight and improve overall health"
-              mealBreakdown="Breakfast, Lunch, Dinner, Snacks"
-              rating={4.5}
-              reviews={2530}
-              fees={50.99}
-              onPress={() => alert("View Full Plan pressed")}
-            />
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={{ overflow: "visible" }} // Allows shadow visibility
+          >
+            <View style={{ paddingHorizontal: 10 }}>
+              <DietPlanCard
+                planName="Weight Loss Plan"
+                timePeriod="12 Weeks"
+                objective="Lose weight and improve overall health"
+                mealBreakdown="Breakfast, Lunch, Dinner, Snacks"
+                onPress={() => alert("View Full Plan pressed")}
+              />
+            </View>
           </ScrollView>
         </View>
 
         {/* Diet Plans */}
         <View style={styles.RecommendCards1}>
           <Text style={styles.recommendText}>Diet Plans</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <DietPlanCard
-              planName="Weight Loss Plan"
-              timePeriod="12 Weeks"
-              objective="Lose weight and improve overall health"
-              mealBreakdown="Breakfast, Lunch, Dinner, Snacks"
-              rating={4.5}
-              reviews={2530}
-              fees={50.99}
-              onPress={() => alert("View Full Plan pressed")}
-            />
-            <DietPlanCard
-              planName="Weight Loss Plan"
-              timePeriod="12 Weeks"
-              objective="Lose weight and improve overall health"
-              mealBreakdown="Breakfast, Lunch, Dinner, Snacks"
-              rating={4.5}
-              reviews={2530}
-              fees={50.99}
-              onPress={() => alert("View Full Plan pressed")}
-            />
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={{ overflow: "visible" }} // Allows shadow visibility
+          >
+            <View style={{ paddingHorizontal: 10 }}>
+              <DietPlanCard
+                planName="Weight Loss Plan"
+                timePeriod="12 Weeks"
+                objective="Lose weight and improve overall health"
+                mealBreakdown="Breakfast, Lunch, Dinner, Snacks"
+                rating={4.5}
+                reviews={2530}
+                fees={50.99}
+                onPress={() => alert("View Full Plan pressed")}
+              />
+            </View>
           </ScrollView>
         </View>
+      </ScrollView>
 
-        {/* All Packages */}
-        <View style={styles.RecommendCards2}>
-          <Text style={styles.recommendText}>All Packages</Text>
-          <DietPlanCard
-            planName="Weight Loss Plan"
-            timePeriod="12 Weeks"
-            objective="Lose weight and improve overall health"
-            mealBreakdown="Breakfast, Lunch, Dinner, Snacks"
-            rating={4.5}
-            reviews={2530}
-            fees={50.99}
-            onPress={() => alert("View Full Plan pressed")}
+      <View
+        style={{
+          position: "absolute",
+          bottom: 30,
+          right: 10,
+          zIndex: 40,
+          cursor: "pointer",
+        }}
+      >
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("CareBot")}
+        >
+          <Image
+            source={require("../../Assets/Images/carebot.png")}
+            style={{ width: 60, height: 60 }}
           />
-        </View>
-      </ScrollView>     
-      <View style={{ position: 'absolute', bottom: 30, right: 10,zIndex:40,cursor:'pointer' }}>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("CareBot")}> 
-      <Image
-        source={require("../../Assets/Images/carebot.png")}
-        style={{ width: 60, height: 60 }}
-      />
-      </TouchableOpacity>
+        </TouchableOpacity>
       </View>
     </View>
-
   );
 };
 
@@ -240,9 +237,9 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 25,
-    borderWidth:1,
-    padding:10,
-    borderColor:'#706e6e'
+    borderWidth: 1,
+    padding: 10,
+    borderColor: "#706e6e",
   },
   ImageCard: {
     width: "90%",

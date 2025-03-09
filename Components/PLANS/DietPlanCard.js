@@ -1,56 +1,55 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
 
-const DietPlanCard = ({
-  planName,
-  timePeriod,
-  objective,
-  mealBreakdown,
-  rating,
-  reviews,
-  fees,
-  onPress,
-}) => {
+const DietPlanCard = ({ planName, timePeriod, objective }) => {
   return (
-    <View style={styles.card}>
-      <View style={styles.header}>
-        <FontAwesome name="cutlery" size={50} color="#4CAF50" />
-        <View style={styles.info}>
-          <Text style={styles.planName}>{planName}</Text>
-          <Text style={styles.timePeriod}>{timePeriod}</Text>
-          <View style={styles.ratingContainer}>
-            <FontAwesome name="star" size={16} color="#FFD700" />
-            <Text style={styles.rating}>
-              {rating} ({reviews})
-            </Text>
+    <View style={styles.container}>
+      <View style={styles.card}>
+        <View style={styles.header}>
+          <View style={styles.info}>
+            <Text style={styles.planName}>{planName}</Text>
+            <Text style={styles.timePeriod}>{timePeriod}</Text>
+            <Text style={styles.description}>{objective}</Text>
           </View>
         </View>
+
+        {/* Buttons */}
+        <View style={styles.footer}>
+          <TouchableOpacity style={[styles.button, styles.viewDetailButton]}>
+            <Text style={styles.buttonText}>View Detail</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.button, styles.cancelButton]}>
+            <Text style={styles.buttonText}>Cancel Subscription</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      {/* 
-      <Text style={styles.objective}>{objective}</Text>
-      <View style={styles.footer}>
-        <Text style={styles.fees}>Fees: ${fees}</Text>
-        <TouchableOpacity style={styles.button} onPress={onPress}>
-          <Text style={styles.buttonText}>View Full Plan</Text>
-        </TouchableOpacity>
-      </View> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  
   card: {
     backgroundColor: "#fff",
     borderRadius: 15,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
     padding: 20,
-    marginBottom: 20,
-    marginHorizontal: 10,
-    elevation: 5,
+    width: "100%", // Max width 96%
+    alignSelf: "center", // Center the card
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 0 }, // Ensures shadow is evenly spread
+    shadowOpacity: 0.25, // Slightly increased for better visibility
+    shadowRadius: 10, // More spread for a softer effect
+    elevation: 10, // Stronger depth effect on Android
   },
+  
+  
+  
+  
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -69,54 +68,28 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#888",
   },
-  ratingContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 5,
-  },
-  rating: {
-    fontSize: 14,
-    color: "#666",
-    marginLeft: 5,
-  },
-  objectiveLabel: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#333",
-    marginTop: 10,
-  },
-  objective: {
-    fontSize: 14,
-    color: "#666",
-    marginTop: 5,
-  },
-  mealBreakdownLabel: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#333",
-    marginTop: 10,
-  },
-  mealBreakdown: {
+  description: {
     fontSize: 14,
     color: "#666",
     marginTop: 5,
   },
   footer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    justifyContent: "flex-end",
     marginTop: 15,
   },
-  fees: {
-    fontSize: 16,
-    color: "#333",
-  },
   button: {
-    backgroundColor: "#4CAF50",
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     borderRadius: 8,
     alignItems: "center",
+    marginLeft: 10,
+  },
+  viewDetailButton: {
+    backgroundColor: "#4CAF50", // Green button
+  },
+  cancelButton: {
+    backgroundColor: "#D32F2F", // Red button
   },
   buttonText: {
     color: "#fff",
