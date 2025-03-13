@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoginApi from "../../Api/Login";
-import getUserData from "../../Api/Dashboard";
+import {getUserData} from "../../Api/Dashboard";
 import { useName } from "../../Api/ContextApi";
 
 export default Login = () => {
@@ -31,6 +31,7 @@ export default Login = () => {
   const handleLogin = async () => {
     const response = await LoginApi(email, password);
     if (response) {
+      const userEmail = email; // Store email before resetting
       setEmail("");
       setPassword("");
       Toast.show({
@@ -42,14 +43,21 @@ export default Login = () => {
       });
 
       const fetchUserData = async () => {
-        const data = await getUserData(email);
-        await AsyncStorage.setItem("userid", String(data.id));
-        await AsyncStorage.setItem("name", data.name);
-        await AsyncStorage.setItem("email", data.email);
-        await AsyncStorage.setItem("username", data.username);
-        setName(data.name);
+        console.log("Fetching user data for:", userEmail); // Debugging
+        const data = await getUserData(userEmail);
+        console.log("Data:", data); // Ensure this prints
+
+        if (data) {
+          await AsyncStorage.setItem("userid", String(data.id));
+          await AsyncStorage.setItem("name", data.name);
+          await AsyncStorage.setItem("email", data.email);
+          await AsyncStorage.setItem("username", data.username);
+          setName(data.name);
+        } else {
+          console.log("User data is null");
+        }
       };
-      fetchUserData();
+      await fetchUserData();
       navigation.replace("DrawerNavigation");
     } else {
       Toast.show({
@@ -61,6 +69,38 @@ export default Login = () => {
       });
     }
   };
+
+  // const getUserData = async (email) => {
+  //   console.log("Email:", email);
+  //   try {
+  //     const url = `${API_BASE_URL}/getuser/${email}`;
+  //     const response = await fetch(url, {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+
+  //     const responseData = await response.json();
+  //     const userData = responseData.data; // Access the 'data' object
+
+  //     if (userData) {
+  //       return userData;
+  //     } else {
+  //       return null;
+  //     }
+  //   } catch (error) {
+  //     return null;
+  //   }
+  // };
+
+
+
+
 
   useEffect(() => {
     setIsDisabledButton(!(email && password));
@@ -107,10 +147,14 @@ export default Login = () => {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity onPress={() => { navigation.navigate('Forgot'); }}>
-       <View style={styles.forgotContainer}>
-        <Text style={styles.forgot}>Forgot Password?</Text>
-      </View>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Forgot");
+        }}
+      >
+        <View style={styles.forgotContainer}>
+          <Text style={styles.forgot}>Forgot Password?</Text>
+        </View>
       </TouchableOpacity>
 
       {/* Sign In Button */}
@@ -121,7 +165,7 @@ export default Login = () => {
         ]}
         onPress={handleLogin}
         disabled={isDisabledButton}
-        pointerEvents={isDisabledButton ? 'none' : 'auto'}
+        pointerEvents={isDisabledButton ? "none" : "auto"}
       >
         <Text style={styles.signInButtonText}>SIGN IN</Text>
       </TouchableOpacity>
@@ -145,15 +189,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    paddingTop:80,
+    paddingTop: 80,
     padding: 25,
     backgroundColor: "white",
   },
-  safeBirth:{
-    color:'#00C781',
-    fontSize:30,
-    fontWeight:700,
-    marginBottom:20
+  safeBirth: {
+    color: "#00C781",
+    fontSize: 30,
+    fontWeight: 700,
+    marginBottom: 20,
   },
   logo: {
     width: 150,
@@ -208,9 +252,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 20,
   },
-  signInButtonDisabled: {
-   
-  },
+  signInButtonDisabled: {},
   signInButtonText: {
     color: "#fff",
     fontSize: 16,
@@ -237,13 +279,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   forgotContainer: {
-    alignSelf: 'flex-start',  // Align to the start
-    width: '100%',
-     color: "#00C781",
-     marginTop:-10,
-     marginBottom:10
+    alignSelf: "flex-start", // Align to the start
+    width: "100%",
+    color: "#00C781",
+    marginTop: -10,
+    marginBottom: 10,
   },
-  
+
   forgot: {
     fontSize: 14,
     color: "#00C781",

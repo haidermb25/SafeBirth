@@ -53,10 +53,11 @@ export const subscribeDietPlan=async (dietPlanId,weekNo)=>{
         return null
         }
         const data = await response.json();
-        alert(data.statusCode)
         return data;
     } catch (error) { 
         return null
-    }   
-    
+    }    
 }
+
+
+

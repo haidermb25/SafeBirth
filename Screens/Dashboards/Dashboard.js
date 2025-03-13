@@ -14,27 +14,68 @@ import {
   TextInput,
 } from "react-native";
 import DietPlanCard from "../../Components/PLANS/DietPlanCard";
+import ExercisePlanCard from "../../Components/PLANS/ExercisePlanCard";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import getUserData from "../../Api/Dashboard";
 import { useName } from "../../Api/ContextApi";
+import { getSubscribeDietPlan } from "../../Api/Dashboard";
+import { getSubscribeExercisePlan } from "../../Api/Dashboard";
 const Dashboard = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const [isSearching, setIsSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [subscribeDietPlan, setSubscribeDietPlan] = useState([]);
+  const [subscribeExercisePlan, setSubscribeExercisePlan] = useState([]);
   const { name } = useName();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const userData = await getUserData();
-      console
-      if (userData) {
-        console.log(userData);
-      }
+
+  const fetchSubscribeDiet = async () => {
+    console.log("Fetching diet plan");
+    const Plan = await getSubscribeDietPlan();
+    if(Plan==null){
+      setSubscribeDietPlan("")
     }
-    fetchData();
-  }, []);
+    else{
+    setSubscribeDietPlan(Plan.data[0]);
+    }
+  };
+  
+  const fetchSubscribeExercise = async () => {
+    const Plan = await getSubscribeExercisePlan();
+    if(Plan==null){
+      setSubscribeExercisePlan("")
+    }
+    else{
+    setSubscribeExercisePlan(Plan.data);
+    }
+  };
+
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        const userData = await getUserData();
+        if (userData) {
+          console.log(userData);
+        }
+      };
+      fetchData();
+      fetchSubscribeDiet();
+      fetchSubscribeExercise();
+      return () => {
+        // Cleanup if needed
+      };
+    }, [])
+  );
+
+  const handleCancelSubscription = async () => {
+      await fetchSubscribeDiet();
+      await fetchSubscribeExercise();
+      setSubscribeDietPlan([...subscribeDietPlan]); // This forces a re-render
+      setSubscribeExercisePlan([...subscribeExercisePlan]); // This also forces a re-render
+  }
 
   return (
     <View style={styles.container}>
@@ -140,20 +181,19 @@ const Dashboard = () => {
             horizontal
             showsHorizontalScrollIndicator={false}
             style={{ overflow: "visible" }} // Allows shadow visibility
-          >
+            >
             <View style={{ paddingHorizontal: 10 }}>
-              <DietPlanCard
-                planName="Weight Loss Plan"
-                timePeriod="12 Weeks"
-                objective="Lose weight and improve overall health"
-                mealBreakdown="Breakfast, Lunch, Dinner, Snacks"
-                onPress={() => alert("View Full Plan pressed")}
-              />
+              <ExercisePlanCard
+              planName={subscribeExercisePlan.planname || "No Plan"}
+              timePeriod={(subscribeExercisePlan.duration || 0) + " days"}
+              objective={subscribeExercisePlan.description || "There is no plan subscribed"}
+              onCancel={handleCancelSubscription}
+             />
             </View>
-          </ScrollView>
-        </View>
+            </ScrollView>
+          </View>
 
-        {/* Diet Plans */}
+          {/* Diet Plans */}
         <View style={styles.RecommendCards1}>
           <Text style={styles.recommendText}>Diet Plans</Text>
           <ScrollView
@@ -163,14 +203,10 @@ const Dashboard = () => {
           >
             <View style={{ paddingHorizontal: 10 }}>
               <DietPlanCard
-                planName="Weight Loss Plan"
-                timePeriod="12 Weeks"
-                objective="Lose weight and improve overall health"
-                mealBreakdown="Breakfast, Lunch, Dinner, Snacks"
-                rating={4.5}
-                reviews={2530}
-                fees={50.99}
-                onPress={() => alert("View Full Plan pressed")}
+                planName={subscribeDietPlan.planname|| "No Plan"}
+                timePeriod={(subscribeDietPlan.duration|| 0) + " days"}
+                objective={subscribeDietPlan.description || "There is no plan subscribed"}
+                onCancel={handleCancelSubscription}
               />
             </View>
           </ScrollView>

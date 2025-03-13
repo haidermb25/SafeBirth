@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Appbar } from "react-native-paper";
 
 const games = [
-  { id: "1", title: "Trivia Quiz", screen: "TriviaQuiz", image: require("../../Assets/Images/carebot.png") },
+  { id: "1", title: "NameFusion", screen: "NameFusion", image: require("../../Assets/Images/carebot.png") },
   { id: "2", title: "Word Scramble", screen: "WordScramble", image: require("../../Assets/Images/carebot.png") },
 ];
 

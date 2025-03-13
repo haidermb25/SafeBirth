@@ -4,11 +4,11 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { CancelSubscription } from "../../Api/SubscriptionAPi"; 
 import Toast from "react-native-toast-message";
 
-const DietPlanCard = ({ planName, timePeriod, objective, onCancel }) => {
+const ExercisePlanCard = ({ planName, timePeriod, objective, onCancel }) => {
   const navigation = useNavigation();
 
   const cancelSubscription = async () => {
-    const response = await CancelSubscription("diet");
+    const response = await CancelSubscription("exercise");
     if (response.success === true) {
       Toast.show({
         type: "success",
@@ -122,4 +122,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DietPlanCard;
+export default ExercisePlanCard;

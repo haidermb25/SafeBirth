@@ -11,6 +11,9 @@
     },
     "plugins": [
       "expo-video"
-    ]
+    ],
+    "android": {
+      "package": "com.haider59.SafeBirth"
+    }
   }
 }

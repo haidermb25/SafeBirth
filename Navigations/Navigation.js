@@ -24,6 +24,10 @@ import DietDetail from "../Screens/DietRecommendation/DietDetail";
 import ExerciseCards from "../Screens/ExerciseRecommendation/ExerciseCards";
 import ExerciseDetail from "../Screens/ExerciseRecommendation/ExerciseDetail";
 import WordScramble from "../Screens/Games/WordScramble";
+import ExerciseSubscription from "../Screens/Subscription/ExerciseSubscription";
+import DietSubscription from "../Screens/Subscription/DietSubscription";
+import SubscriptionForm from "../Screens/SubscriptionDataForms/SubscriptionForm";
+import NameFusion from "../Screens/Games/NameFusion";
 // Stack Navigations
 const Stack = createNativeStackNavigator();
 function StackNavigations() {
@@ -172,6 +176,11 @@ function DietNavigation() {
         component={DietDetail}
         options={{ headerShown: false }}
       />
+      <diet.Screen
+       name="subscriptionForm"
+       component={SubscriptionForm}
+       options={{ headerShown: false }} 
+       /> 
     </diet.Navigator>
   );
 }
@@ -190,6 +199,11 @@ function ExerciseNavigation() {
         component={ExerciseDetail}
         options={{ headerShown: false }}
       />
+      <exercise.Screen
+       name="subscriptionForm"
+       component={SubscriptionForm}
+       options={{ headerShown: false }} 
+       /> 
     </exercise.Navigator>
   );
 }
@@ -210,10 +224,38 @@ function GameNavigation(){
       component={WordScramble}
       options={{ headerShown: false }}
       />
+       <games.Screen
+      name="NameFusion"
+      component={NameFusion}
+      options={{ headerShown: false }}
+      />
     </games.Navigator>
   );
 }
 
+
+const subscription = createNativeStackNavigator();  
+function SubscriptionNavigation() {
+  return (
+    <subscription.Navigator initialRouteName="Dashboard">
+      <subscription.Screen
+        name="Dashboard"
+        component={Dashboard}
+        options={{ headerShown: false }}
+      />
+      <subscription.Screen
+        name="DietSubscription"
+        component={DietSubscription}
+        options={{ headerShown: false }}
+      />
+      <subscription.Screen
+        name="ExerciseSubscription"
+        component={ExerciseSubscription}
+        options={{ headerShown: false }}
+      />
+    </subscription.Navigator>
+  );
+}
 
 
 // Drawer Navigation
@@ -254,7 +296,7 @@ function DrawerNavigation() {
 
       <Drawer.Screen
         name="Dashboard"
-        component={Dashboard}
+        component={SubscriptionNavigation}
         options={{ headerShown: false }}
       />
       <Drawer.Screen

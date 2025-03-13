@@ -13,6 +13,7 @@ import {
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { subscribeDietPlan } from "../../Api/DietRecommendation";
+import Toast from "react-native-toast-message";
 
 const DietCard = ({ data }) => {
     const navigation = useNavigation();
@@ -23,14 +24,14 @@ const DietCard = ({ data }) => {
         if (Platform.OS === "ios") {
             Alert.prompt(
                 "Enter Week Number",
-                "Please enter a week number between 1 and 32:",
+                "Please enter a week number between 1 and 36:",
                 [
                     { text: "Cancel", style: "cancel" },
                     {
                         text: "OK",
                         onPress: (input) => {
                             const weekNumber = parseInt(input, 10);
-                            if (weekNumber >= 1 && weekNumber <= 32) {
+                            if (weekNumber >= 1 && weekNumber <= 36) {
                                 subscribeDietPlan(data.dietplanid, weekNumber);
                             } else {
                                 Alert.alert("Invalid Week Number", "Please enter a valid week number between 1 and 32.");
@@ -46,16 +47,42 @@ const DietCard = ({ data }) => {
         }
     };
 
-    const handleConfirmSubscription = () => {
+    const handleConfirmSubscription = async () => {
         const weekNumber = parseInt(weekNo, 10);
-        if (weekNumber >= 1 && weekNumber <= 32) {
-            subscribeDietPlan(data.dietplanid, weekNumber);
-            setModalVisible(false);
-            setWeekNo(""); // Clear the input after subscription
+        if (weekNumber >= 1 && weekNumber <= 36) {
+            try {
+                const response = await subscribeDietPlan(data.dietplanid, weekNumber);
+                console.log(response);  
+    
+                if (response || response.statusCode == 200) {
+                    Toast.show({
+                        type: "success",
+                        text1: "Subscribed!",
+                        text2: "You have successfully subscribed.",
+                        position: "top",
+                        visibilityTime: 2000,
+                    });
+                    navigation.navigate("Dashboard");
+                    setModalVisible(false);
+                    setWeekNo(""); // Clear the input after subscription
+                } else {
+                    throw new Error("Subscription failed");
+                }
+            } catch (error) {
+                console.error("Subscription Error:", error);
+                Toast.show({
+                    type: "error",
+                    text1: "Error",
+                    text2: "Error in subscription",
+                    position: "top",
+                    visibilityTime: 2000,
+                });
+            }
         } else {
             Alert.alert("Invalid Week Number", "Please enter a valid week number between 1 and 32.");
         }
     };
+    
 
     const handleDetails = () => {
         navigation.navigate("DietDetail", { id: String(data.dietplanid || "") });
