@@ -1,35 +1,35 @@
-SafeBirth (AI Pregnancy Care App)
+SafeBirth (AI Pregnancy Food & Exercise Guide App)
 
-SafeBirth is a React Native AI-powered mobile application designed to support women throughout their 9-month pregnancy journey by providing guidance, tracking, and AI-based assistance.
+SafeBirth is an AI-powered React Native mobile application that helps pregnant women with personalized food recommendations and safe exercise guidance throughout their 9-month pregnancy journey.
 
 📖 About
 
-An AI-powered pregnancy care mobile app built with React Native to guide and support women throughout their pregnancy journey.
+An AI-powered pregnancy care app that provides safe food and exercise guidance for women during all stages of pregnancy.
 
 🚀 Features
-AI chatbot for pregnancy guidance
-Pregnancy stage tracking (9 months support)
-Health tips & recommendations
-Daily guidance and alerts
-User-friendly mobile UI
-Secure user data handling
-Educational pregnancy insights
+AI-based food recommendations
+Safe pregnancy exercise plans
+Month-wise guidance (1–9 months)
+Daily health tips
+Chatbot assistance
+Personalized suggestions
+Simple mobile UI
 🏗️ Project Structure
 SafeBirth
 │
 ├── src/
 │   ├── screens
 │   ├── components
+│   ├── ai
 │   ├── services
-│   ├── ai-bot
 │   └── utils
 ├── assets
 └── App.js / App.tsx
 ⚙️ Tech Stack
 React Native
 AI Chatbot Integration
-Node.js (Backend if applicable)
 REST APIs
+Node.js (optional backend)
 Firebase / Cloud services (optional)
 🔧 Setup Instructions
 npm install
